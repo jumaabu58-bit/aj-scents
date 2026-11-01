@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AJ Scents & More | Premium Lifestyle</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  <style>
+    :root {
+      --gold: #d4af37;
+      --dark: #0f0f0f;
+      --card: #1a1a1a;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--dark);
+      color: #f8f1e9;
+      line-height: 1.5;
+    }
+    header {
+      background: rgba(15,15,15,0.97);
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+      padding: 14px 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--gold);
+    }
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 1px;
+    }
+    .cart-icon {
+      font-size: 1.4rem;
+      cursor: pointer;
+      position: relative;
+      color: white;
+      padding: 8px;
+    }
+    .cart-count {
+      position: absolute;
+      top: 0;
+      right: 0;
+      background: var(--gold);
+      color: #000;
+      font-size: 0.75rem;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+    .hero {
+      min-height: 65vh;
+      background: linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.85)), #111;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 100px 20px 50px;
+    }
+    .hero h1 {
+      font-size: clamp(1.9rem, 6vw, 2.8rem);
+      color: var(--gold);
+      margin-bottom: 12px;
+    }
+    .hero p {
+      font-size: 1.05rem;
+      max-width: 500px;
+      margin: 0 auto 25px;
+      opacity: 0.9;
+    }
+    .btn {
+      background: var(--gold);
+      color: #000;
+      padding: 13px 32px;
+      border: none;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    .btn-outline {
+      background: transparent;
+      color: white;
+      border: 1px solid #555;
+    }
+    .btn-pay {
+      background: #25D366;
+      color: white;
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 1.05rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .section {
+      padding: 45px 4%;
+    }
+    h2 {
+      text-align: center;
+      font-size: 1.9rem;
+      color: var(--gold);
+      margin-bottom: 22px;
+    }
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      margin-bottom: 28px;
+    }
+    .filter-btn {
+      padding: 9px 16px;
+      background: #1f1f1f;
+      border: 1px solid var(--gold);
+      color: white;
+      border-radius: 30px;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+    .filter-btn.active {
+      background: var(--gold);
+      color: #000;
+      font-weight: 600;
+    }
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 18px;
+    }
+    .product-card {
+      background: var(--card);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    }
+    .product-card img {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      display: block;
+      background: #2a2a2a;
+    }
+    .product-info {
+      padding: 15px;
+    }
+    .product-info h3 {
+      color: var(--gold);
+      font-size: 1.1rem;
+      margin-bottom: 4px;
+    }
+    .category {
+      font-size: 0.85rem;
+      opacity: 0.7;
+      text-transform: capitalize;
+    }
+    .price {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin: 10px 0 12px;
+    }
+    .add-to-cart {
+      width: 100%;
+      padding: 11px;
+      background: var(--gold);
+      color: #000;
+      border: none;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+    }
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.75);
+      display: none;
+      z-index: 1999;
+    }
+    .cart-sidebar {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      width: min(380px, 100%);
+      height: 100%;
+      background: #111;
+      z-index: 2000;
+      transition: right 0.35s ease;
+      padding: 20px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+    .cart-sidebar.open { right: 0; }
+    .cart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .cart-header h2 { font-size: 1.4rem; margin: 0; color: var(--gold); }
+    .close-cart {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.8rem;
+      cursor: pointer;
+    }
+    .cart-item {
+      display: flex;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid #333;
+      align-items: center;
+    }
+    .cart-item img {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 8px;
+      background: #2a2a2a;
+    }
+    .cart-item-info { flex: 1; }
+    .cart-item-info h4 { font-size: 0.95rem; margin-bottom: 4px; }
+    .remove-btn {
+      background: none;
+      border: none;
+      color: #ff6b6b;
+      font-size: 0.85rem;
+      cursor: pointer;
+      margin-top: 4px;
+    }
+    .cart-footer {
+      margin-top: auto;
+      padding-top: 20px;
+      border-top: 1px solid #333;
+    }
+    .cart-total {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 15px;
+    }
+    .empty-cart {
+      text-align: center;
+      padding: 40px 10px;
+      opacity: 0.6;
+    }
+    .checkout-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 3000;
+      padding: 15px;
+    }
+    .checkout-modal.open { display: flex; }
+    .checkout-box {
+      background: #1a1a1a;
+      width: 100%;
+      max-width: 440px;
+      border-radius: 16px;
+      padding: 25px 20px;
+      max-height: 92vh;
+      overflow-y: auto;
+      border: 1px solid #333;
+    }
+    .checkout-box h2 {
+      text-align: left;
+      font-size: 1.5rem;
+      margin-bottom: 18px;
+    }
+    .form-group { margin-bottom: 15px; }
+    .form-group label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 8px;
+      border: 1px solid #444;
+      background: #111;
+      color: white;
+      font-size: 1rem;
+    }
+    .form-group textarea {
+      resize: vertical;
+      min-height: 70px;
+    }
+    .order-summary {
+      background: #111;
+      border-radius: 10px;
+      padding: 14px;
+      margin: 18px 0;
+      font-size: 0.95rem;
+    }
+    .order-summary div {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+    .success-message {
+      text-align: center;
+      padding: 30px 10px;
+      display: none;
+    }
+    .success-message i {
+      font-size: 3.5rem;
+      color: #4ade80;
+      margin-bottom: 15px;
+    }
+    .whatsapp-btn {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      width: 60px;
+      height: 60px;
+      background: #25D366;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+      z-index: 999;
+      text-decoration: none;
+    }
+    footer {
+      text-align: center;
+      padding: 35px 15px;
+      background: #0a0a0a;
+      color: #888;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">AJ SCENTS & MORE</div>
+    <div class="cart-icon" id="cart-icon">
+      <i class="fas fa-shopping-bag"></i>
+      <span class="cart-count" id="cart-count">0</span>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div>
+      <h1>Premium Lifestyle Collection</h1>
+      <p>Luxury perfumes, stylish shoes and exclusive bags — all in one place.</p>
+      <button class="btn" id="shop-now-btn">Shop Now</button>
+    </div>
+  </section>
+
+  <section class="section" id="shop-section">
+    <h2>Our Collection</h2>
+    <div class="filters">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="perfume">Perfumes</button>
+      <button class="filter-btn" data-filter="shoes">Shoes</button>
+      <button class="filter-btn" data-filter="bags">Bags</button>
+    </div>
+    <div class="products" id="products"></div>
+  </section>
+
+  <!-- Cart -->
+  <div class="overlay" id="overlay"></div>
+  <div class="cart-sidebar" id="cart-sidebar">
+    <div class="cart-header">
+      <h2>Your Cart</h2>
+      <button class="close-cart" id="close-cart">×</button>
+    </div>
+    <div id="cart-items">
+      <div class="empty-cart">Your cart is empty</div>
+    </div>
+    <div class="cart-footer">
+      <div class="cart-total">Total: UGX <span id="cart-total">0</span></div>
+      <button class="btn" style="width:100%; margin-bottom:10px;" id="checkout-btn">Proceed to Checkout</button>
+      <button class="btn btn-outline" style="width:100%;" id="continue-btn">Continue Shopping</button>
+    </div>
+  </div>
+
+  <!-- Checkout -->
+  <div class="checkout-modal" id="checkout-modal">
+    <div class="checkout-box">
+      <div id="checkout-form-view">
+        <h2>Checkout</h2>
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" id="customer-name" placeholder="Enter your full name">
+        </div>
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="tel" id="customer-phone" placeholder="e.g. 07XXXXXXXX">
+        </div>
+        <div class="form-group">
+          <label>Delivery Address</label>
+          <textarea id="customer-address" placeholder="Street, Area, City"></textarea>
+        </div>
+        <div class="order-summary" id="order-summary"></div>
+        <button class="btn-pay" id="place-order-btn">
+          <i class="fab fa-whatsapp"></i>
+          <span>Complete Order on WhatsApp</span>
+        </button>
+        <button class="btn btn-outline" style="width:100%;" id="cancel-checkout-btn">Cancel</button>
+      </div>
+      <div class="success-message" id="success-message">
+        <i class="fas fa-check-circle"></i>
+        <h2 style="color:#4ade80;">Order Ready!</h2>
+        <p style="margin:12px 0;">We will contact you on WhatsApp shortly.</p>
+      </div>
+    </div>
+  </div>
+
+  <a href="https://wa.me/256705127282?text=Hello%20AJ%20Scents%20%26%20More%2C%20I%20would%20like%20to%20inquire%20about%20your%20products." 
+     class="whatsapp-btn" target="_blank" rel="noopener">
+    <i class="fab fa-whatsapp"></i>
+  </a>
+
+  <footer>
+    <p>© 2026 AJ Scents & More • Kampala, Uganda</p>
+    <p style="margin-top:6px;">Premium Perfumes • Shoes • Bags</p>
+  </footer>
+
+  <script>
+    const products = [
+      // Perfumes
+      { id: 1, name: "Noir Elegance", category: "perfume", price: 185000, image: "https://images.pexels.com/photos/965989/pexels-photo-965989.jpeg" },
+      { id: 2, name: "Rose Whisper", category: "perfume", price: 165000, image: "https://images.pexels.com/photos/965990/pexels-photo-965990.jpeg" },
+      { id: 3, name: "Ocean Breeze", category: "perfume", price: 145000, image: "https://images.pexels.com/photos/258244/pexels-photo-258244.jpeg" },
+      { id: 4, name: "Golden Oud", category: "perfume", price: 245000, image: "https://images.pexels.com/photos/965989/pexels-photo-965989.jpeg" },
+
+      // Shoes (your real images)
+      { id: 5, name: "Premium Leather Shoe 1", category: "shoes", price: 280000, image: "IMG-20261031-WA0010.jpg" },
+      { id: 6, name: "Premium Leather Shoe 2", category: "shoes", price: 295000, image: "IMG-20261031-WA0011.jpg" },
+      { id: 7, name: "Premium Leather Shoe 3", category: "shoes", price: 310000, image: "IMG-20261031-WA0012.jpg" },
+      { id: 8, name: "Premium Leather Shoe 4", category: "shoes", price: 275000, image: "IMG-20261031-WA0013.jpg" },
+
+      // Bags (your real images)
+      { id: 9, name: "Classic Backpack", category: "bags", price: 185000, image: "IMG-20261029-WA0034.jpg" },
+      { id: 10, name: "Designer Backpack", category: "bags", price: 210000, image: "IMG-20261029-WA0109.jpg" },
+      { id: 11, name: "Urban Backpack", category: "bags", price: 195000, image: "IMG-20261029-WA0110.jpg" },
+      { id: 12, name: "Leather Style Bag", category: "bags", price: 225000, image: "IMG-20261029-WA0112.jpg" },
+      { id: 13, name: "Travel Backpack", category: "bags", price: 240000, image: "IMG-20261029-WA0113.jpg" },
+      { id: 14, name: "Casual Backpack", category: "bags", price: 175000, image: "IMG-20261029-WA0115.jpg" },
+      { id: 15, name: "Premium Backpack", category: "bags", price: 255000, image: "IMG-20261029-WA0116.jpg" },
+      { id: 16, name: "Stylish Backpack", category: "bags", price: 190000, image: "IMG-20261029-WA0117.jpg" },
+      { id: 17, name: "Modern Backpack", category: "bags", price: 205000, image: "IMG-20261029-WA0119.jpg" },
+      { id: 18, name: "Executive Bag", category: "bags", price: 265000, image: "IMG-20261029-WA0121.jpg" },
+      { id: 19, name: "City Backpack", category: "bags", price: 180000, image: "IMG-20261029-WA0122.jpg" },
+      { id: 20, name: "Luxury Backpack", category: "bags", price: 275000, image: "IMG-20261029-WA0124.jpg" },
+      { id: 21, name: "Everyday Backpack", category: "bags", price: 165000, image: "IMG-20261029-WA0125.jpg" }
+    ];
+
+    const FALLBACK_IMAGE = 'https://images.pexels.com/photos/1666405/pexels-photo-1666405.jpeg';
+    let cart = [];
+
+    function renderProducts(list) {
+      const container = document.getElementById('products');
+      container.innerHTML = '';
+
+      list.forEach(p => {
+        const card = document.createElement('div');
+        card.className = 'product-card';
+        card.innerHTML = `
+          <img src="\( {p.image}" alt=" \){p.name}" loading="lazy" onerror="this.src='${FALLBACK_IMAGE}'">
+          <div class="product-info">
+            <h3>${p.name}</h3>
+            <div class="category">${p.category}</div>
+            <div class="price">UGX ${p.price.toLocaleString()}</div>
+            <button class="add-to-cart" data-id="${p.id}">Add to Cart</button>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+
+      container.querySelectorAll('.add-to-cart').forEach(btn => {
+        btn.addEventListener('click', function() {
+          addToCart(parseInt(this.getAttribute('data-id')));
+        });
+      });
+    }
+
+    function filterProducts(cat) {
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.filter === cat);
+      });
+      if (cat === 'all') {
+        renderProducts(products);
+      } else {
+        renderProducts(products.filter(p => p.category === cat));
+      }
+    }
+
+    function addToCart(id) {
+      const product = products.find(p => p.id === id);
+      if (!product) return;
+
+      const existing = cart.find(item => item.id === id);
+      if (existing) {
+        existing.quantity += 1;
+      } else {
+        cart.push({ ...product, quantity: 1 });
+      }
+      updateCartCount();
+      alert(product.name + " added to cart!");
+    }
+
+    function removeFromCart(id) {
+      cart = cart.filter(item => item.id !== id);
+      updateCartCount();
+      renderCartItems();
+    }
+
+    function updateCartCount() {
+      const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+      document.getElementById('cart-count').textContent = count;
+    }
+
+    function renderCartItems() {
+      const container = document.getElementById('cart-items');
+      if (cart.length === 0) {
+        container.innerHTML = '<div class="empty-cart">Your cart is empty</div>';
+        document.getElementById('cart-total').textContent = '0';
+        return;
+      }
+
+      let total = 0;
+      container.innerHTML = '';
+      cart.forEach(item => {
+        total += item.price * item.quantity;
+        const div = document.createElement('div');
+        div.className = 'cart-item';
+        div.innerHTML = `
+          <img src="\( {item.image}" alt=" \){item.name}" onerror="this.src='${FALLBACK_IMAGE}'">
+          <div class="cart-item-info">
+            <h4>${item.name}</h4>
+            <div>UGX ${item.price.toLocaleString()} × ${item.quantity}</div>
+            <button class="remove-btn" data-id="${item.id}">Remove</button>
+          </div>
+        `;
+        container.appendChild(div);
+      });
+      document.getElementById('cart-total').textContent = total.toLocaleString();
+
+      container.querySelectorAll('.remove-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          removeFromCart(parseInt(this.getAttribute('data-id')));
+        });
+      });
+    }
+
+    function openCart() {
+      renderCartItems();
+      document.getElementById('cart-sidebar').classList.add('open');
+      document.getElementById('overlay').style.display = 'block';
+    }
+
+    function closeCart() {
+      document.getElementById('cart-sidebar').classList.remove('open');
+      document.getElementById('overlay').style.display = 'none';
+    }
+
+    function openCheckout() {
+      if (cart.length === 0) {
+        alert('Your cart is empty!');
+        return;
+      }
+
+      let summaryHTML = '';
+      let total = 0;
+      cart.forEach(item => {
+        const lineTotal = item.price * item.quantity;
+        total += lineTotal;
+        summaryHTML += `<div><span>${item.name} × ${item.quantity}</span><span>UGX ${lineTotal.toLocaleString()}</span></div>`;
+      });
+      summaryHTML += `<div style="margin-top:10px; padding-top:10px; border-top:1px solid #333; font-weight:700;"><span>Total</span><span>UGX ${total.toLocaleString()}</span></div>`;
+
+      document.getElementById('order-summary').innerHTML = summaryHTML;
+      document.getElementById('checkout-form-view').style.display = 'block';
+      document.getElementById('success-message').style.display = 'none';
+      document.getElementById('checkout-modal').classList.add('open');
+      closeCart();
+    }
+
+    function closeCheckout() {
+      document.getElementById('checkout-modal').classList.remove('open');
+    }
+
+    function placeOrder() {
+      const name = document.getElementById('customer-name').value.trim();
+      const phone = document.getElementById('customer-phone').value.trim();
+      const address = document.getElementById('customer-address').value.trim();
+
+      if (!name || !phone || !address) {
+        alert('Please fill in Name, Phone and Address.');
+        return;
+      }
+
+      let message = `Hello AJ Scents & More,%0A%0A*New Order*%0A%0A`;
+      message += `*Name:* ${name}%0A`;
+      message += `*Phone:* ${phone}%0A`;
+      message += `*Address:* ${address}%0A%0A`;
+      message += `*Items:*%0A`;
+
+      let total = 0;
+      cart.forEach(item => {
+        const lineTotal = item.price * item.quantity;
+        total += lineTotal;
+        message += `- ${item.name} × ${item.quantity} = UGX ${lineTotal.toLocaleString()}%0A`;
+      });
+
+      message += `%0A*Total: UGX ${total.toLocaleString()}*%0A%0APlease confirm my order.`;
+
+      window.open(`https://wa.me/256705127282?text=${message}`, '_blank');
+
+      document.getElementById('checkout-form-view').style.display = 'none';
+      document.getElementById('success-message').style.display = 'block';
+
+      cart = [];
+      updateCartCount();
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      renderProducts(products);
+
+      document.getElementById('shop-now-btn').addEventListener('click', () => {
+        document.getElementById('shop-section').scrollIntoView({ behavior: 'smooth' });
+      });
+
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          filterProducts(this.dataset.filter);
+        });
+      });
+
+      document.getElementById('cart-icon').addEventListener('click', openCart);
+      document.getElementById('close-cart').addEventListener('click', closeCart);
+      document.getElementById('overlay').addEventListener('click', closeCart);
+      document.getElementById('continue-btn').addEventListener('click', closeCart);
+      document.getElementById('checkout-btn').addEventListener('click', openCheckout);
+      document.getElementById('cancel-checkout-btn').addEventListener('click', closeCheckout);
+      document.getElementById('place-order-btn').addEventListener('click', placeOrder);
+    });
+  </script>
+</body>
+</html>
