@@ -1,0 +1,38 @@
+{
+  "url": "http://127.0.0.1:8081/",
+  "viewports": {
+    "desktop": {
+      "width": 1280,
+      "height": 800,
+      "status": 200,
+      "title": "AJ Scents & More",
+      "hasCanvas": false,
+      "bodyTextLen": 1362,
+      "bodyTextHash": "23d868fdeb455a87b3a68a6b32ef345679cfe5f14ddad324fa2c451fa18870c7",
+      "bodyTextPrefix": "KAMPALA AJ Scents & More Bag 0 HOUSE COLLECTION Scent, leather, ",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-built.png"
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "status": 200,
+      "title": "AJ Scents & More",
+      "hasCanvas": false,
+      "bodyTextLen": 1354,
+      "bodyTextHash": "4cea2f67b1e99c63a88a77d223cff68242da5697c839d4f75ece9d4af5f7e43d",
+      "bodyTextPrefix": "AJ Scents & More Bag 0 HOUSE COLLECTION Scent, leather, and the ",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-built-mobile.png"
+    }
+  },
+  "brandWarnings": [],
+  "authWarnings": [],
+  "verdictFile": "/workspace/screenshots/app-builder-built.json",
+  "divergesFromBaseline": false,
+  "baselineReasons": []
+}

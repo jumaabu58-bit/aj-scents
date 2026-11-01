@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AJ Scents & More | Premium Lifestyle</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560;9..144,640&family=Outfit:wght@400;500;600&display=swap">
+  <style>
+    :root {
+      --bg: #f3eee6;
+      --paper: #fffdf8;
+      --ink: #1c1612;
+      --muted: #6f675f;
+      --accent: #7a2432;
+      --line: #ddd4c8;
+      --brass: #8d6a3a;
+      --whatsapp: #1a7a43;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: Outfit, system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.5;
+    }
+    button, [role="button"] { cursor: pointer; font: inherit; color: inherit; }
+    img { display: block; max-width: 100%; }
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 5%;
+      background: rgba(243, 238, 230, 0.92);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(10px);
+    }
+    .nav-meta { font-size: 0.75rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--brass); }
+    .logo {
+      font-family: Fraunces, Georgia, serif;
+      font-size: 1.6rem;
+      color: var(--ink);
+      text-decoration: none;
+      text-align: center;
+    }
+    .logo span { color: var(--accent); }
+    .cart-icon {
+      justify-self: end;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: none;
+      border: none;
+      min-height: 44px;
+      font-size: 0.95rem;
+    }
+    .cart-count {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .wrap { max-width: 1120px; margin: 0 auto; padding: 0 20px; }
+    .hero {
+      display: grid;
+      gap: 28px;
+      align-items: end;
+      padding: 36px 0 12px;
+    }
+    .eyebrow { font-size: 0.75rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--brass); }
+    .hero h1 {
+      font-family: Fraunces, Georgia, serif;
+      font-weight: 560;
+      font-size: clamp(2.8rem, 7vw, 5.2rem);
+      line-height: 0.95;
+      max-width: 12ch;
+      margin: 14px 0;
+    }
+    .hero p { max-width: 38ch; color: var(--muted); font-size: 1.05rem; }
+    .text-link {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      margin-top: 18px;
+      background: none;
+      border: none;
+      border-bottom: 2px solid var(--accent);
+      color: var(--accent);
+      font-weight: 500;
+      padding: 0 0 4px;
+    }
+    .hero-photo figcaption, .rail-note {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 8px;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+    .hero-photo img { width: 100%; aspect-ratio: 4/5; object-fit: cover; }
+    .rail { display: grid; gap: 12px; padding: 22px 0 36px; }
+    .rail-card {
+      position: relative;
+      height: 160px;
+      border: none;
+      padding: 0;
+      overflow: hidden;
+      text-align: left;
+      background: none;
+    }
+    .rail-card img { width: 100%; height: 100%; object-fit: cover; }
+    .rail-card span {
+      position: absolute;
+      left: 16px;
+      bottom: 12px;
+      font-family: Fraunces, Georgia, serif;
+      font-size: 2rem;
+      color: white;
+      text-shadow: 0 1px 8px rgba(0,0,0,0.35);
+    }
+    .shop-head {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px 24px;
+      align-items: flex-end;
+      justify-content: space-between;
+      border-top: 1px solid var(--line);
+      padding-top: 28px;
+    }
+    .shop-head h2 { font-family: Fraunces, Georgia, serif; font-size: 2.4rem; font-weight: 560; }
+    .filters { display: flex; flex-wrap: wrap; gap: 4px; }
+    .filter-btn {
+      min-height: 44px;
+      padding: 8px 12px;
+      background: none;
+      border: none;
+      color: var(--muted);
+    }
+    .filter-btn.active { color: var(--accent); border-bottom: 2px solid var(--accent); font-weight: 600; }
+    .rail-card.filter-btn.active { border-bottom: none; font-weight: 500; color: inherit; }
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 28px 18px;
+      padding: 28px 0 48px;
+    }
+    .product-card img { width: 100%; aspect-ratio: 3/4; object-fit: cover; background: #e7e0d4; }
+    .product-info { padding-top: 12px; }
+    .product-top { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; }
+    .product-info h3 { font-family: Fraunces, Georgia, serif; font-size: 1.45rem; font-weight: 560; }
+    .price { font-size: 0.92rem; white-space: nowrap; }
+    .category { color: var(--muted); font-size: 0.85rem; text-transform: capitalize; margin-top: 2px; }
+    .add-to-cart {
+      margin-top: 8px;
+      min-height: 44px;
+      padding: 0;
+      background: none;
+      border: none;
+      color: var(--accent);
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .overlay { position: fixed; inset: 0; background: rgba(28,22,18,0.4); display: none; z-index: 30; border: none; }
+    .cart-sidebar {
+      position: fixed; top: 0; right: -100%; width: min(400px, 100%); height: 100%;
+      background: var(--paper); z-index: 40; transition: right 0.25s ease;
+      padding: 20px; display: flex; flex-direction: column;
+    }
+    .cart-sidebar.open { right: 0; }
+    .cart-header { display: flex; justify-content: space-between; align-items: center; }
+    .cart-header h2 { font-family: Fraunces, Georgia, serif; font-size: 2.2rem; font-weight: 560; }
+    .close-cart { background: none; border: none; font-size: 1.8rem; min-width: 44px; min-height: 44px; }
+    #cart-items { overflow: auto; flex: 1; }
+    .cart-item { display: flex; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+    .cart-item img { width: 64px; height: 80px; object-fit: cover; }
+    .qty { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
+    .qty button { width: 32px; height: 32px; border: 1px solid var(--line); background: transparent; }
+    .cart-footer { border-top: 1px solid var(--line); padding-top: 16px; }
+    .cart-total { font-size: 1.15rem; margin-bottom: 12px; }
+    .btn, .btn-outline, .btn-pay {
+      width: 100%; min-height: 46px; border-radius: 0; font-weight: 600; margin-bottom: 8px;
+    }
+    .btn { background: var(--accent); color: white; border: none; }
+    .btn-outline { background: transparent; color: var(--ink); border: 1px solid var(--line); }
+    .btn-pay { background: var(--whatsapp); color: white; border: none; }
+    .empty-cart { text-align: center; color: var(--muted); padding: 48px 8px; }
+    .checkout-modal {
+      position: fixed; inset: 0; background: rgba(28,22,18,0.45);
+      display: none; align-items: flex-end; justify-content: center; z-index: 50; padding: 12px;
+    }
+    .checkout-modal.open { display: flex; }
+    .checkout-box {
+      background: var(--paper); width: 100%; max-width: 440px; max-height: 92vh; overflow: auto; padding: 22px 18px;
+    }
+    .checkout-box h2 { font-family: Fraunces, Georgia, serif; font-size: 2.2rem; font-weight: 560; margin-bottom: 12px; }
+    .form-group { margin-bottom: 12px; }
+    .form-group label { display: block; font-size: 0.85rem; color: var(--muted); margin-bottom: 4px; }
+    .form-group input, .form-group textarea {
+      width: 100%; min-height: 44px; padding: 10px 12px; border: 1px solid var(--line);
+      background: var(--bg); color: var(--ink); font: inherit;
+    }
+    .form-error { color: var(--accent); min-height: 1.2em; font-size: 0.9rem; }
+    .order-summary { background: var(--bg); padding: 12px; margin: 8px 0 14px; font-size: 0.95rem; }
+    .order-summary div { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 6px; }
+    .success-message { display: none; text-align: center; padding: 28px 8px; }
+    .success-message h2 { color: var(--whatsapp); }
+    .toast {
+      position: fixed; left: 50%; top: 78px; transform: translateX(-50%) translateY(-8px);
+      background: var(--ink); color: var(--bg); padding: 10px 16px; border-radius: 999px;
+      opacity: 0; pointer-events: none; transition: 0.2s ease; z-index: 60; font-weight: 600;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    .whatsapp-btn {
+      position: fixed; right: 16px; bottom: 16px; width: 56px; height: 56px; border-radius: 50%;
+      background: var(--whatsapp); color: white; display: flex; align-items: center; justify-content: center;
+      z-index: 25; text-decoration: none; box-shadow: 0 8px 20px rgba(26,122,67,0.25);
+    }
+    footer {
+      border-top: 1px solid var(--line); color: var(--muted); font-size: 0.9rem;
+      display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between; padding: 28px 0 88px;
+    }
+    @media (min-width: 800px) {
+      .hero { grid-template-columns: 1.15fr 0.85fr; padding-top: 48px; }
+      .rail { grid-template-columns: repeat(3, 1fr); }
+      .checkout-modal { align-items: center; }
+    }
+    @media (max-width: 640px) {
+      .nav { grid-template-columns: 1fr auto; }
+      .nav-meta { display: none; }
+      .logo { justify-self: start; font-size: 1.3rem; }
+    }
+  </style>
+</head>
+<body>
+  <header class="nav">
+    <p class="nav-meta">Kampala</p>
+    <a class="logo" href="#top">AJ Scents <span>&</span> More</a>
+    <button class="cart-icon" id="cart-icon" type="button" aria-label="Open cart">
+      Bag <span class="cart-count" id="cart-count">0</span>
+    </button>
+  </header>
+
+  <main class="wrap" id="top">
+    <section class="hero">
+      <div>
+        <p class="eyebrow">House collection</p>
+        <h1>Scent, leather, and the bag you keep.</h1>
+        <p>Perfumes, shoes and bags from Kampala. Choose a piece, then send the order on WhatsApp.</p>
+        <button class="text-link" id="shop-now-btn" type="button">Browse the house</button>
+      </div>
+      <figure class="hero-photo">
+        <img src="products/shoe-1.jpg" alt="Premium Leather Shoe 1">
+        <figcaption><span>Premium Leather Shoe 1</span><span>Shoes</span></figcaption>
+      </figure>
+    </section>
+
+    <section class="rail">
+      <button class="rail-card filter-btn" type="button" data-filter="perfume"><img src="products/perfume-1.jpg" alt=""><span>Perfumes</span></button>
+      <button class="rail-card filter-btn" type="button" data-filter="shoes"><img src="products/shoe-3.jpg" alt=""><span>Shoes</span></button>
+      <button class="rail-card filter-btn" type="button" data-filter="bags"><img src="products/bag-1.jpg" alt=""><span>Bags</span></button>
+    </section>
+
+    <section id="shop-section">
+      <div class="shop-head">
+        <h2>The edit</h2>
+        <div class="filters">
+          <button class="filter-btn active" type="button" data-filter="all">All</button>
+          <button class="filter-btn" type="button" data-filter="perfume">Perfumes</button>
+          <button class="filter-btn" type="button" data-filter="shoes">Shoes</button>
+          <button class="filter-btn" type="button" data-filter="bags">Bags</button>
+        </div>
+      </div>
+      <div class="products" id="products"></div>
+    </section>
+
+    <footer>
+      <p>AJ Scents & More · Kampala</p>
+      <p>Perfumes, shoes and bags · WhatsApp orders</p>
+    </footer>
+  </main>
+
+  <div class="overlay" id="overlay"></div>
+  <aside class="cart-sidebar" id="cart-sidebar" aria-label="Cart">
+    <div class="cart-header">
+      <h2>Your bag</h2>
+      <button class="close-cart" id="close-cart" type="button" aria-label="Close cart">×</button>
+    </div>
+    <div id="cart-items"><div class="empty-cart">Your bag is empty</div></div>
+    <div class="cart-footer">
+      <div class="cart-total">Total UGX <span id="cart-total">0</span></div>
+      <button class="btn" id="checkout-btn" type="button">Checkout</button>
+      <button class="btn-outline" id="continue-btn" type="button">Keep browsing</button>
+    </div>
+  </aside>
+
+  <div class="checkout-modal" id="checkout-modal">
+    <div class="checkout-box">
+      <div id="checkout-form-view">
+        <h2>Checkout</h2>
+        <div class="form-group">
+          <label for="customer-name">Full Name</label>
+          <input type="text" id="customer-name" placeholder="Enter your full name" autocomplete="name">
+        </div>
+        <div class="form-group">
+          <label for="customer-phone">Phone Number</label>
+          <input type="tel" id="customer-phone" placeholder="e.g. 07XXXXXXXX" autocomplete="tel">
+        </div>
+        <div class="form-group">
+          <label for="customer-address">Delivery Address</label>
+          <textarea id="customer-address" placeholder="Street, Area, City"></textarea>
+        </div>
+        <p class="form-error" id="form-error"></p>
+        <div class="order-summary" id="order-summary"></div>
+        <button class="btn-pay" id="place-order-btn" type="button">Complete Order on WhatsApp</button>
+        <button class="btn-outline" id="cancel-checkout-btn" type="button">Cancel</button>
+      </div>
+      <div class="success-message" id="success-message">
+        <h2>Order ready</h2>
+        <p style="margin:12px 0;">WhatsApp should be open. We will confirm your order there.</p>
+        <button class="btn" id="back-to-shop" type="button">Back to the edit</button>
+      </div>
+    </div>
+  </div>
+
+  <a class="whatsapp-btn" id="whatsapp-float" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp">
+    <svg viewBox="0 0 24 24" width="30" height="30" fill="currentColor" aria-hidden="true">
+      <path d="M20.5 3.5A11 11 0 0 0 2.1 16.7L1 23l6.5-1.1A11 11 0 0 0 20.5 3.5ZM12 20.2a9.1 9.1 0 0 1-4.6-1.3l-.3-.2-3.9.7.7-3.8-.2-.3A9.2 9.2 0 1 1 12 20.2Zm5-6.9c-.3-.1-1.6-.8-1.8-.9s-.4-.1-.6.2-.7.9-.8 1-.3.2-.6.1a7.5 7.5 0 0 1-2.2-1.4 8.2 8.2 0 0 1-1.5-1.9c-.2-.3 0-.4.1-.6l.4-.5.2-.3a.5.5 0 0 0 0-.5c0-.1-.6-1.4-.8-1.9s-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.8 11.8 0 0 0 4.5 4 15 15 0 0 0 1.5.6 3.6 3.6 0 0 0 1.7.1 2.7 2.7 0 0 0 1.8-1.3 2.2 2.2 0 0 0 .2-1.3c-.1-.1-.3-.2-.6-.3Z"></path>
+    </svg>
+  </a>
+  <div class="toast" id="toast" role="status"></div>
+
+  <script>
+    const WHATSAPP = "256705127282";
+
+    // Photos live in the products/ folder next to this file.
+    // Replace a file (same name) when you have the real WhatsApp picture.
+    const products = [
+      { id: 1, name: "Noir Elegance", category: "perfume", price: 185000, image: "products/perfume-1.jpg" },
+      { id: 2, name: "Rose Whisper", category: "perfume", price: 165000, image: "products/perfume-2.jpg" },
+      { id: 3, name: "Ocean Breeze", category: "perfume", price: 145000, image: "products/perfume-3.jpg" },
+      { id: 4, name: "Golden Oud", category: "perfume", price: 245000, image: "products/perfume-4.jpg" },
+
+      { id: 5, name: "Premium Leather Shoe 1", category: "shoes", price: 280000, image: "products/shoe-1.jpg" },
+      { id: 6, name: "Premium Leather Shoe 2", category: "shoes", price: 295000, image: "products/shoe-2.jpg" },
+      { id: 7, name: "Premium Leather Shoe 3", category: "shoes", price: 310000, image: "products/shoe-3.jpg" },
+      { id: 8, name: "Premium Leather Shoe 4", category: "shoes", price: 275000, image: "products/shoe-4.jpg" },
+
+      { id: 9, name: "Classic Backpack", category: "bags", price: 185000, image: "products/bag-1.jpg" },
+      { id: 10, name: "Designer Backpack", category: "bags", price: 210000, image: "products/bag-2.jpg" },
+      { id: 11, name: "Urban Backpack", category: "bags", price: 195000, image: "products/bag-3.jpg" },
+      { id: 12, name: "Leather Style Bag", category: "bags", price: 225000, image: "products/bag-4.jpg" },
+      { id: 13, name: "Travel Backpack", category: "bags", price: 240000, image: "products/bag-5.jpg" },
+      { id: 14, name: "Casual Backpack", category: "bags", price: 175000, image: "products/bag-6.jpg" },
+      { id: 15, name: "Premium Backpack", category: "bags", price: 255000, image: "products/bag-10.jpg" },
+      { id: 16, name: "Stylish Backpack", category: "bags", price: 190000, image: "products/bag-8.jpg" },
+      { id: 17, name: "Modern Backpack", category: "bags", price: 205000, image: "products/bag-11.jpg" },
+      { id: 18, name: "Executive Bag", category: "bags", price: 265000, image: "products/bag-7.jpg" },
+      { id: 19, name: "City Backpack", category: "bags", price: 180000, image: "products/bag-9.jpg" },
+      { id: 20, name: "Luxury Backpack", category: "bags", price: 275000, image: "products/bag-2.jpg" },
+      { id: 21, name: "Everyday Backpack", category: "bags", price: 165000, image: "products/bag-6.jpg" }
+    ];
+
+    let cart = [];
+
+    function money(amount) {
+      return amount.toLocaleString("en-UG");
+    }
+
+    function showToast(text) {
+      const toast = document.getElementById("toast");
+      toast.textContent = text;
+      toast.classList.add("show");
+      clearTimeout(showToast._timer);
+      showToast._timer = setTimeout(() => toast.classList.remove("show"), 1600);
+    }
+
+    function renderProducts(list) {
+      const container = document.getElementById("products");
+      container.replaceChildren();
+
+      list.forEach((product) => {
+        const card = document.createElement("article");
+        card.className = "product-card";
+
+        const img = document.createElement("img");
+        img.src = product.image;
+        img.alt = product.name;
+        img.loading = "lazy";
+
+        const info = document.createElement("div");
+        info.className = "product-info";
+        info.innerHTML =
+          "<div class='product-top'><h3></h3><div class='price'></div></div><div class='category'></div>";
+        info.querySelector("h3").textContent = product.name;
+        info.querySelector(".category").textContent = product.category;
+        info.querySelector(".price").textContent = "UGX " + money(product.price);
+
+        const button = document.createElement("button");
+        button.className = "add-to-cart";
+        button.type = "button";
+        button.textContent = "Add to bag";
+        button.addEventListener("click", () => addToCart(product.id));
+        info.appendChild(button);
+
+        card.append(img, info);
+        container.appendChild(card);
+      });
+    }
+
+    function filterProducts(category) {
+      document.querySelectorAll(".filter-btn").forEach((button) => {
+        button.classList.toggle("active", button.dataset.filter === category);
+      });
+      const list = category === "all"
+        ? products
+        : products.filter((product) => product.category === category);
+      renderProducts(list);
+    }
+
+    function addToCart(id) {
+      const product = products.find((item) => item.id === id);
+      if (!product) return;
+      const existing = cart.find((item) => item.id === id);
+      if (existing) existing.quantity += 1;
+      else cart.push({ ...product, quantity: 1 });
+      updateCartCount();
+      showToast(product.name + " added to cart");
+    }
+
+    function changeQty(id, delta) {
+      cart = cart
+        .map((item) => item.id === id ? { ...item, quantity: item.quantity + delta } : item)
+        .filter((item) => item.quantity > 0);
+      updateCartCount();
+      renderCartItems();
+    }
+
+    function updateCartCount() {
+      const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+      document.getElementById("cart-count").textContent = String(count);
+    }
+
+    function renderCartItems() {
+      const container = document.getElementById("cart-items");
+      if (cart.length === 0) {
+        container.innerHTML = '<div class="empty-cart">Your bag is empty</div>';
+        document.getElementById("cart-total").textContent = "0";
+        return;
+      }
+
+      let total = 0;
+      container.replaceChildren();
+      cart.forEach((item) => {
+        total += item.price * item.quantity;
+        const row = document.createElement("div");
+        row.className = "cart-item";
+
+        const img = document.createElement("img");
+        img.src = item.image;
+        img.alt = "";
+
+        const info = document.createElement("div");
+        info.className = "cart-item-info";
+        const title = document.createElement("h4");
+        title.textContent = item.name;
+        const price = document.createElement("div");
+        price.textContent = "UGX " + money(item.price);
+        const qty = document.createElement("div");
+        qty.className = "qty";
+
+        const minus = document.createElement("button");
+        minus.type = "button";
+        minus.textContent = "−";
+        minus.setAttribute("aria-label", "Decrease " + item.name);
+        minus.addEventListener("click", () => changeQty(item.id, -1));
+
+        const count = document.createElement("span");
+        count.textContent = String(item.quantity);
+
+        const plus = document.createElement("button");
+        plus.type = "button";
+        plus.textContent = "+";
+        plus.setAttribute("aria-label", "Increase " + item.name);
+        plus.addEventListener("click", () => changeQty(item.id, 1));
+
+        qty.append(minus, count, plus);
+        info.append(title, price, qty);
+        row.append(img, info);
+        container.appendChild(row);
+      });
+      document.getElementById("cart-total").textContent = money(total);
+    }
+
+    function openCart() {
+      renderCartItems();
+      document.getElementById("cart-sidebar").classList.add("open");
+      document.getElementById("overlay").style.display = "block";
+    }
+
+    function closeCart() {
+      document.getElementById("cart-sidebar").classList.remove("open");
+      document.getElementById("overlay").style.display = "none";
+    }
+
+    function cartTotal() {
+      return cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    }
+
+    function openCheckout() {
+      if (cart.length === 0) {
+        showToast("Your bag is empty");
+        return;
+      }
+      const summary = document.getElementById("order-summary");
+      summary.replaceChildren();
+      cart.forEach((item) => {
+        const line = document.createElement("div");
+        const name = document.createElement("span");
+        name.textContent = item.name + " × " + item.quantity;
+        const amount = document.createElement("span");
+        amount.textContent = "UGX " + money(item.price * item.quantity);
+        line.append(name, amount);
+        summary.appendChild(line);
+      });
+      const totalLine = document.createElement("div");
+      totalLine.style.marginTop = "10px";
+      totalLine.style.paddingTop = "10px";
+      totalLine.style.borderTop = "1px solid #333";
+      totalLine.style.fontWeight = "700";
+      const label = document.createElement("span");
+      label.textContent = "Total";
+      const amount = document.createElement("span");
+      amount.textContent = "UGX " + money(cartTotal());
+      totalLine.append(label, amount);
+      summary.appendChild(totalLine);
+
+      document.getElementById("form-error").textContent = "";
+      document.getElementById("checkout-form-view").style.display = "block";
+      document.getElementById("success-message").style.display = "none";
+      document.getElementById("checkout-modal").classList.add("open");
+      closeCart();
+    }
+
+    function closeCheckout() {
+      document.getElementById("checkout-modal").classList.remove("open");
+    }
+
+    function placeOrder() {
+      const name = document.getElementById("customer-name").value.trim();
+      const phone = document.getElementById("customer-phone").value.trim();
+      const address = document.getElementById("customer-address").value.trim();
+      const error = document.getElementById("form-error");
+      if (!name || !phone || !address) {
+        error.textContent = "Please fill in name, phone and address.";
+        return;
+      }
+      error.textContent = "";
+
+      const lines = cart.map((item) => {
+        return "- " + item.name + " × " + item.quantity + " = UGX " + money(item.price * item.quantity);
+      });
+      const message = [
+        "Hello AJ Scents & More,",
+        "",
+        "New Order",
+        "",
+        "Name: " + name,
+        "Phone: " + phone,
+        "Address: " + address,
+        "",
+        "Items:",
+        lines.join("\n"),
+        "",
+        "Total: UGX " + money(cartTotal()),
+        "",
+        "Please confirm my order."
+      ].join("\n");
+
+      window.open(
+        "https://wa.me/" + WHATSAPP + "?text=" + encodeURIComponent(message),
+        "_blank",
+        "noopener,noreferrer"
+      );
+
+      document.getElementById("checkout-form-view").style.display = "none";
+      document.getElementById("success-message").style.display = "block";
+      cart = [];
+      updateCartCount();
+      document.getElementById("customer-name").value = "";
+      document.getElementById("customer-phone").value = "";
+      document.getElementById("customer-address").value = "";
+    }
+
+    document.getElementById("whatsapp-float").href =
+      "https://wa.me/" + WHATSAPP + "?text=" +
+      encodeURIComponent("Hello AJ Scents & More, I would like to inquire about your products.");
+
+    renderProducts(products);
+
+    document.getElementById("shop-now-btn").addEventListener("click", () => {
+      document.getElementById("shop-section").scrollIntoView({ behavior: "smooth" });
+    });
+    document.querySelectorAll(".filter-btn").forEach((button) => {
+      button.addEventListener("click", () => {
+        filterProducts(button.dataset.filter);
+        if (button.classList.contains("rail-card")) {
+          document.getElementById("shop-section").scrollIntoView({ behavior: "smooth" });
+        }
+      });
+    });
+    document.getElementById("cart-icon").addEventListener("click", openCart);
+    document.getElementById("close-cart").addEventListener("click", closeCart);
+    document.getElementById("overlay").addEventListener("click", closeCart);
+    document.getElementById("continue-btn").addEventListener("click", closeCart);
+    document.getElementById("checkout-btn").addEventListener("click", openCheckout);
+    document.getElementById("cancel-checkout-btn").addEventListener("click", closeCheckout);
+    document.getElementById("place-order-btn").addEventListener("click", placeOrder);
+    document.getElementById("back-to-shop").addEventListener("click", closeCheckout);
+  </script>
+</body>
+</html>
